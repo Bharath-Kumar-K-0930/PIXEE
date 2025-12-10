@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PIXEE - AI Face Recognition for Event Photos
 
-## Getting Started
+**Upload a selfie → Find your memories instantly**
 
-First, run the development server:
+PIXEE helps users find all photos containing their face among 500+ event photos using client-side AI face recognition.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🎯 Features
+
+- **Privacy First**: All AI processing runs on your device
+- **Smart Matching**: Advanced face detection using face-api.js
+- **Admin Panel**: Event creation and photo management
+- **User Portal**: Upload selfie and discover your event photos
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 15 (TypeScript, App Router)
+- **Backend & DB**: Supabase
+- **AI**: face-api.js (client-side face recognition)
+- **Styling**: TailwindCSS
+- **Deployment**: Vercel
+
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
+
+### Setup Steps
+
+1. **Clone repository**
+   ```bash
+   cd pixee
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+   
+   Copy the example environment file:
+   ```bash
+   copy env.example.txt .env.local
+   ```
+   
+   Then edit `.env.local` and add your Supabase credentials:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
+
+4. **Setup Supabase Database**
+   
+   (SQL schema will be provided in Phase 2)
+
+5. **Download Face Detection Models**
+   
+   Download face-api.js models and place in `/public/models/`:
+   - tiny_face_detector_model-weights_manifest.json
+   - face_landmark_68_model-weights_manifest.json
+   - face_recognition_model-weights_manifest.json
+   
+   Models available at: https://github.com/justadudewhohacks/face-api.js/tree/master/weights
+
+6. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000)
+
+## 📁 Project Structure
+
+```
+pixee/
+├── app/
+│   ├── page.tsx          # Landing page
+│   ├── admin/
+│   │   └── page.tsx      # Admin panel
+│   └── find/
+│       └── page.tsx      # User face matching
+├── lib/
+│   ├── supabase.ts       # Supabase client & types
+│   └── faceDetection.ts  # Face-api.js utilities
+├── public/
+│   └── models/           # Face detection models (to be added)
+└── env.example.txt       # Environment variables template
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🗄️ Database Schema
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Events Table
+```sql
+id          uuid
+name        text
+code        text (unique)
+created_at  timestamp
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Photos Table
+```sql
+id          uuid
+event_id    uuid (fk → events.id)
+image_url   text
+created_at  timestamp
+```
 
-## Learn More
+## 🎨 Pages
 
-To learn more about Next.js, take a look at the following resources:
+1. **Landing Page** (`/`)
+   - App introduction
+   - Navigation to admin and find pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Admin Panel** (`/admin`)
+   - Login with Supabase Auth
+   - Create events
+   - Upload photo URLs
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Find Photos** (`/find`)
+   - Select event
+   - Upload selfie
+   - AI face matching
+   - Display matched photos
 
-## Deploy on Vercel
+## 🔧 Development Phases
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- ✅ **Phase 1**: Project setup & dependencies
+- ⏳ **Phase 2**: Supabase schema & configuration
+- ⏳ **Phase 3**: Admin page implementation
+- ⏳ **Phase 4**: AI model integration
+- ⏳ **Phase 5**: Face matching functionality
+- ⏳ **Phase 6**: Deployment to Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 License
+
+MIT

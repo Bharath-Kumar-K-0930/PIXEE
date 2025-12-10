@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pixee - Find Yourself in Event Photos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="api.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo-section">
+                    <div class="logo">
+                        <span class="logo-text">pixee</span>
+                    </div>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#features" class="nav-link">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#pricing" class="nav-link">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#testimonials" class="nav-link">Stories</a>
+                    </li>
+                </ul>
+
+                <div class="nav-right">
+                    <button class="btn-signup">Get Started</button>
+                    <button class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Find Yourself in Every Event</h1>
+                <p class="hero-subtitle">Upload your selfie and instantly see all photos where you appear from events. Perfect for weddings, concerts, parties, and celebrations.</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary">Get Started Free</button>
+                    <button class="btn-secondary">See How It Works</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">100K+</span>
+                        <span class="stat-label">Photos Matched</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">99.2%</span>
+                        <span class="stat-label">Accuracy Rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">25K+</span>
+                        <span class="stat-label">Happy Users</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-img" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                    <p>Smart Albums</p>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-img" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                    <p>Timeline View</p>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-img" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                    <p>Collage Maker</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>How It Works for Everyone</h2>
+            <p class="section-subtitle">Simple roles for organizers and guests</p>
+            
+            <div class="features-grid">
+                <div class="feature-card organizer-card">
+                    <div class="feature-icon">📸</div>
+                    <h3>For Event Organizers</h3>
+                    <p><strong>Upload event photos</strong> from your camera, phone, or cloud storage in bulk. Create events for weddings, concerts, parties, and celebrations.</p>
+                </div>
+                <div class="feature-card user-card">
+                    <div class="feature-icon">🤳</div>
+                    <h3>For Event Guests</h3>
+                    <p><strong>Upload your selfie</strong> to find all photos where you appear in the event album. Instant results powered by AI face recognition.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Accurate Face Matching</h3>
+                    <p>Advanced AI identifies and matches your face across hundreds or thousands of event photos with 99%+ accuracy</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Get your matched photos in seconds. No waiting, no manual browsing through thousands of pictures</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Privacy Protected</h3>
+                    <p>Your photos and facial data are encrypted and secure. Only you can access your matched results</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📥</div>
+                    <h3>Easy Download</h3>
+                    <p>Download all your matched photos in one go or individually in high resolution</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2>Three Simple Steps to Find Your Photos</h2>
+            <p class="section-subtitle">From event to your hands in minutes</p>
+            
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3>Organizer Uploads Event</h3>
+                    <p>Event organizers upload all event photos to create a shared album. Supports bulk uploads from multiple sources.</p>
+                    <div class="step-visual">📸</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3>You Upload Your Selfie</h3>
+                    <p>Take a clear selfie of yourself and upload it. Our AI analyzes your face in seconds.</p>
+                    <div class="step-visual">🤳</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3>Get Your Photos</h3>
+                    <p>See all photos where you appear instantly. Download, share, or save to your collection.</p>
+                    <div class="step-visual">✨</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2>What Users Love</h2>
+            <p class="section-subtitle">Real feedback from weddings, concerts, and celebrations</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"At my wedding, 2,000 photos were taken. Instead of scrolling forever, I uploaded my selfie and found all 47 photos of me in seconds!"</p>
+                    <div class="testimonial-author">
+                        <div class="avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                        <div>
+                            <strong>Priya Sharma</strong>
+                            <span>Bride</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"As a wedding photographer, this tool saves my clients hours. They get their photos instantly without me having to sort through thousands of images."</p>
+                    <div class="testimonial-author">
+                        <div class="avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                        <div>
+                            <strong>Rajesh Patel</strong>
+                            <span>Wedding Photographer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Used it for my college fest. 5,000 photos uploaded, found all my photos instantly. Perfect accuracy and super fast!"</p>
+                    <div class="testimonial-author">
+                        <div class="avatar" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                        <div>
+                            <strong>Aditya Verma</strong>
+                            <span>Event Organizer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Animated Features Showcase -->
+    <section class="animated-showcase" id="gallery">
+        <div class="container">
+            <h2>Why Choose pixee</h2>
+            <p class="section-subtitle">Powerful features designed for modern photo experiences</p>
+            
+            <div class="animated-grid">
+                <div class="animated-card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Lightning Fast</h3>
+                    <p>AI-powered face recognition in seconds, not hours. Find yourself instantly across thousands of photos.</p>
+                    <div class="card-animation">
+                        <div class="moving-dot"></div>
+                    </div>
+                </div>
+                
+                <div class="animated-card">
+                    <div class="card-icon">🔒</div>
+                    <h3>100% Private</h3>
+                    <p>Your photos stay yours. Enterprise-grade encryption ensures your memories are always secure and private.</p>
+                    <div class="card-animation">
+                        <div class="moving-dot"></div>
+                    </div>
+                </div>
+                
+                <div class="animated-card">
+                    <div class="card-icon">✨</div>
+                    <h3>Smart Search</h3>
+                    <p>Advanced facial recognition technology that works in any lighting, angle, or expression. Never miss a moment.</p>
+                    <div class="card-animation">
+                        <div class="moving-dot"></div>
+                    </div>
+                </div>
+                
+                <div class="animated-card">
+                    <div class="card-icon">📱</div>
+                    <h3>Mobile Ready</h3>
+                    <p>Seamlessly works on all devices. Upload, search, and download from your phone, tablet, or desktop.</p>
+                    <div class="card-animation">
+                        <div class="moving-dot"></div>
+                    </div>
+                </div>
+                
+                <div class="animated-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Accurate Matching</h3>
+                    <p>99.9% accuracy with intelligent algorithms. Only shows photos where you actually appear.</p>
+                    <div class="card-animation">
+                        <div class="moving-dot"></div>
+                    </div>
+                </div>
+                
+                <div class="animated-card">
+                    <div class="card-icon">🌍</div>
+                    <h3>Global Scale</h3>
+                    <p>Works for events of any size. From small gatherings to massive festivals with millions of photos.</p>
+                    <div class="card-animation">
+                        <div class="moving-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Affordable Plans for Everyone</h2>
+            <p class="section-subtitle">Use as guest for free, or organize events affordably</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Guest</h3>
+                    <p class="price"><span>₹0</span></p>
+                    <p class="price-desc">Free forever</p>
+                    <ul class="features-list">
+                        <li>✓ Upload selfie</li>
+                        <li>✓ Find your photos</li>
+                        <li>✓ Download results</li>
+                        <li>✗ Organize events</li>
+                        <li>✗ Bulk uploads</li>
+                    </ul>
+                    <button class="btn-outline">Start Now</button>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="badge">For Organizers</div>
+                    <h3>Organizer</h3>
+                    <p class="price"><span>₹99</span>/event</p>
+                    <p class="price-desc">One-time payment</p>
+                    <ul class="features-list">
+                        <li>✓ Upload up to 5,000 photos</li>
+                        <li>✓ Guest face matching</li>
+                        <li>✓ 30-day event access</li>
+                        <li>✓ Download reports</li>
+                        <li>✓ Email support</li>
+                    </ul>
+                    <button class="btn-primary">Create Event</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Premium Event</h3>
+                    <p class="price"><span>₹299</span>/event</p>
+                    <p class="price-desc">Advanced features</p>
+                    <ul class="features-list">
+                        <li>✓ Unlimited photo uploads</li>
+                        <li>✓ Advanced analytics</li>
+                        <li>✓ 90-day access</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Custom branding</li>
+                    </ul>
+                    <button class="btn-outline">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Find Yourself in Every Photo</h2>
+            <p>Whether you're a guest or an organizer, discover photos instantly with AI-powered face recognition</p>
+            <div class="cta-buttons">
+                <button class="btn-primary btn-large" onclick="location.href='guest.html'">Find My Photos (Free)</button>
+                <button class="btn-secondary btn-large" onclick="location.href='organizer.html'">Create Event for ₹99</button>
+            </div>
+            <p class="cta-note">No credit card required to search • Instant results guaranteed</p>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team">
+        <div class="container">
+            <h2>Meet Our Developers</h2>
+            <p class="section-subtitle">The talented team building pixee</p>
+            
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                    <h3>Krishna</h3>
+                    <p class="team-role">Lead Developer & Founder</p>
+                    <p class="team-bio">Full-stack developer with 8+ years of experience in AI and facial recognition technology.</p>
+                    <div class="team-socials">
+                        <a href="#" title="LinkedIn">in</a>
+                        <a href="#" title="GitHub">◆</a>
+                        <a href="#" title="Twitter">𝕏</a>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                    <h3>Bharath Kumar</h3>
+                    <p class="team-role">Backend Engineer</p>
+                    <p class="team-bio">Specialist in cloud infrastructure and API development. Ensures pixee runs smoothly at scale.</p>
+                    <div class="team-socials">
+                        <a href="#" title="LinkedIn">in</a>
+                        <a href="#" title="GitHub">◆</a>
+                        <a href="#" title="Twitter">𝕏</a>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-avatar" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                    <h3>Husain A</h3>
+                    <p class="team-role">AI/ML Engineer</p>
+                    <p class="team-bio">Computer vision expert focused on building the core face recognition algorithm with 99%+ accuracy.</p>
+                    <div class="team-socials">
+                        <a href="#" title="LinkedIn">in</a>
+                        <a href="#" title="GitHub">◆</a>
+                        <a href="#" title="Twitter">𝕏</a>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-avatar" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                    <h3>Anil Kumar</h3>
+                    <p class="team-role">Frontend Developer</p>
+                    <p class="team-bio">Creates intuitive interfaces that make pixee easy to use for guests and organizers alike.</p>
+                    <div class="team-socials">
+                        <a href="#" title="LinkedIn">in</a>
+                        <a href="#" title="GitHub">◆</a>
+                        <a href="#" title="Twitter">𝕏</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>pixee</h4>
+                    <p>Upload your selfie to find all photos of you from events. Event organizers upload photos, guests find themselves.</p>
+                    <div class="social-links">
+                        <a href="#" title="Twitter">𝕏</a>
+                        <a href="#" title="Facebook">f</a>
+                        <a href="#" title="Instagram">📷</a>
+                        <a href="#" title="LinkedIn">in</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>For Guests</h4>
+                    <ul>
+                        <li><a href="#">Find My Photos</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>For Organizers</h4>
+                    <ul>
+                        <li><a href="#">Create Event</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 pixee. All rights reserved.</p>
+                <div class="developers">
+                    <p><strong>Developed by:</strong> Krishna, Bharath Kumar, Husain A, Anil Kumar</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
