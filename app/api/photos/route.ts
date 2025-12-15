@@ -89,3 +89,61 @@ export async function POST(request: Request) {
         }, { status: 500 });
     }
 }
+
+export async function DELETE(request: Request) {
+    const supabase = await createClient();
+    try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            return NextResponse.json({ error: 'Photo ID is required' }, { status: 400 });
+        }
+
+        // 1. Get photo details to find storage path
+        const { data: photo, error: fetchError } = await supabase
+            .from('photos')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (fetchError || !photo) {
+            return NextResponse.json({ error: 'Photo not found' }, { status: 404 });
+        }
+
+        // 2. Delete from Storage if it's an uploaded file
+        if (photo.source_type === 'upload' && photo.image_url) {
+            try {
+                // Extract path from URL (e.g., .../photos/eventId/filename.jpg -> eventId/filename.jpg)
+                const urlObj = new URL(photo.image_url);
+                const pathParts = urlObj.pathname.split('/photos/');
+                if (pathParts.length > 1) {
+                    const storagePath = pathParts[1]; // Correct path relative to bucket
+                    const { error: storageError } = await supabase.storage
+                        .from('photos')
+                        .remove([storagePath]);
+
+                    if (storageError) console.warn('Storage deletion warning:', storageError);
+                }
+            } catch (e) {
+                console.warn('Failed to parse image URL for deletion:', e);
+            }
+        }
+
+        // 3. Delete from Database
+        const { error: deleteError } = await supabase
+            .from('photos')
+            .delete()
+            .eq('id', id);
+
+        if (deleteError) {
+            throw deleteError;
+        }
+
+        return NextResponse.json({ success: true });
+
+    } catch (error: any) {
+        console.error('Delete error:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}

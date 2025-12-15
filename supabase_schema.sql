@@ -47,4 +47,35 @@ create policy "Public Access" on storage.objects for select
 using ( bucket_id = 'photos' );
 
 create policy "Public Upload" on storage.objects for insert
-with check ( bucket_id = 'photos' );
+
+-- UPDATED SCHEMA FOR PRIVACY
+-- 1. Add new columns to events
+alter table public.events add column if not exists allowed_emails text[] default array[]::text[];
+alter table public.events add column if not exists created_by uuid references auth.users(id);
+
+-- 2. Update RLS Policies for Events
+-- Drop old permissive policies
+drop policy if exists "Public events are viewable by everyone" on public.events;
+drop policy if exists "Events are insertable by everyone" on public.events;
+
+-- Create strict policies
+create policy "Events are viewable by creator and allowed users" on public.events
+  for select using (
+    auth.uid() = created_by or 
+    (allowed_emails is not null and auth.email() = any(allowed_emails))
+  );
+
+create policy "Events are insertable by authenticated users" on public.events
+  for insert with check (
+    auth.role() = 'authenticated'
+  );
+
+create policy "Events are updateable by creator" on public.events
+  for update using (
+    auth.uid() = created_by
+  );
+
+create policy "Events are deletable by creator" on public.events
+  for delete using (
+    auth.uid() = created_by
+  );

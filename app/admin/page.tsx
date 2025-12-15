@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Event, Photo } from '@/lib/types'
 import { createClient } from '@/utils/supabase/client'
 import { User } from '@supabase/supabase-js'
+import Toast from '@/components/Toast'
+import ConfirmModal from '@/components/ConfirmModal'
 
 export default function AdminPage() {
     const supabase = createClient()
@@ -21,6 +23,7 @@ export default function AdminPage() {
     // Event form state
     const [eventName, setEventName] = useState('')
     const [eventCode, setEventCode] = useState('')
+    const [allowedEmails, setAllowedEmails] = useState('')
     const [events, setEvents] = useState<Event[]>([])
     const [eventLoading, setEventLoading] = useState(false)
 
@@ -31,6 +34,13 @@ export default function AdminPage() {
     const [uploadFiles, setUploadFiles] = useState<FileList | null>(null)
     const [photos, setPhotos] = useState<Photo[]>([])
     const [photoLoading, setPhotoLoading] = useState(false)
+    const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 })
+    const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null)
+    const [photoToDelete, setPhotoToDelete] = useState<string | null>(null)
+
+    const showToast = (message: string, type: 'success' | 'error') => {
+        setToast({ message, type })
+    }
 
     // Check auth state on mount
     useEffect(() => {
@@ -82,10 +92,11 @@ export default function AdminPage() {
 
             if (error) throw error
 
-            alert('Signup successful! Check your email for confirmation.')
+            showToast('Signup successful! Check your email for confirmation.', 'success')
             setUser(data.user) // Optimistic set, though email confirm might be needed
         } catch (error: any) {
             setAuthError(error.message)
+            showToast(error.message, 'error')
         }
 
         setAuthLoading(false)
@@ -140,18 +151,25 @@ export default function AdminPage() {
             const res = await fetch('/api/events', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: eventName, code: eventCode })
+                body: JSON.stringify({
+                    name: eventName,
+                    code: eventCode,
+                    allowedEmails: allowedEmails.split(/[\n,]/).map(e => e.trim()).filter(e => e)
+                })
             })
 
             if (res.ok) {
                 setEventName('')
                 setEventCode('')
+                setAllowedEmails('')
                 loadEvents()
             } else {
-                alert('Error creating event')
+                const data = await res.json()
+                showToast(`Error creating event: ${data.error || 'Unknown error'}`, 'error')
             }
-        } catch (error) {
-            alert('Error creating event')
+        } catch (error: any) {
+            console.error('Creation error:', error)
+            showToast(`Error creating event: ${error.message || 'Network error'}`, 'error')
         }
 
         setEventLoading(false)
@@ -172,7 +190,7 @@ export default function AdminPage() {
     async function handleAddPhotos(e: React.FormEvent) {
         e.preventDefault()
         if (!selectedEventId) {
-            alert('Please select an event first')
+            showToast('Please select an event first', 'error')
             return
         }
 
@@ -195,6 +213,8 @@ export default function AdminPage() {
         // Handle file uploads
         if (uploadFiles && uploadFiles.length > 0) {
             let uploadedCount = 0
+            setUploadProgress({ current: 0, total: uploadFiles.length })
+
             for (let i = 0; i < uploadFiles.length; i++) {
                 const file = uploadFiles[i]
                 const formData = new FormData()
@@ -209,16 +229,20 @@ export default function AdminPage() {
                     })
 
                     if (!res.ok) {
-                        const errorData = await res.json().catch(() => ({ error: 'Unknown error', details: 'Could not parse JSON' }));
-                        console.error('Server error details:', errorData);
+                        const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
+                        console.error('Upload failed:', errorData);
                         throw new Error(errorData.error || 'Upload failed');
                     }
                     uploadedCount++
                 } catch (err) {
                     console.error(`Error uploading ${file.name}`, err)
                 }
+
+                // Update progress
+                setUploadProgress(prev => ({ ...prev, current: i + 1 }))
             }
-            if (uploadedCount > 0) alert('Uploads complete!')
+            if (uploadedCount > 0) showToast('Uploads complete!', 'success')
+            setUploadProgress({ current: 0, total: 0 }) // Reset
         }
 
         // Handle Google Drive folder (link only for now)
@@ -228,7 +252,7 @@ export default function AdminPage() {
             formData.append('url', driveFolderLink)
             formData.append('sourceType', 'drive_folder')
             await fetch('/api/photos', { method: 'POST', body: formData })
-            alert('Drive folder link saved!')
+            showToast('Drive folder link saved!', 'success')
         }
 
         setPhotoUrls('')
@@ -239,11 +263,30 @@ export default function AdminPage() {
     }
 
     async function handleDeletePhoto(photoId: string) {
-        if (!confirm('Are you sure you want to delete this photo?')) return
-        // Note: Logic to delete photo via API is needed if requested, 
-        // but for now we focus on matching previous capabilities (which had delete).
-        // I'll skip implementation unless specifically asked since API route needs update.
-        alert('Delete functionality moved to server-side (pending implementation).')
+        setPhotoToDelete(photoId)
+    }
+
+    async function executeDeletePhoto() {
+        if (!photoToDelete) return
+
+        try {
+            const res = await fetch(`/api/photos?id=${photoToDelete}`, {
+                method: 'DELETE'
+            })
+
+            if (res.ok) {
+                // Remove from local state immediately
+                setPhotos(photos.filter(p => p.id !== photoToDelete))
+                showToast('Photo deleted', 'success')
+            } else {
+                showToast('Failed to delete photo', 'error')
+            }
+        } catch (error) {
+            console.error('Delete error', error)
+            showToast('Error deleting photo', 'error')
+        } finally {
+            setPhotoToDelete(null)
+        }
     }
 
     if (loading) {
@@ -351,6 +394,22 @@ export default function AdminPage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-white via-[#e0f7fa] to-[#e0f7fa] p-8">
             <div className="max-w-6xl mx-auto">
+                {/* Modals */}
+                {toast && (
+                    <Toast
+                        message={toast.message}
+                        type={toast.type}
+                        onClose={() => setToast(null)}
+                    />
+                )}
+                <ConfirmModal
+                    isOpen={!!photoToDelete}
+                    title="Delete Photo"
+                    message="Are you sure you want to delete this photo? This action cannot be undone."
+                    onConfirm={executeDeletePhoto}
+                    onCancel={() => setPhotoToDelete(null)}
+                />
+
                 {/* Header */}
                 <div className="flex justify-between items-center mb-12">
                     <div>
@@ -405,6 +464,22 @@ export default function AdminPage() {
                                 />
                             </div>
 
+                            <div>
+                                <label className="block text-[#0a4f5c] text-sm font-medium mb-2">
+                                    Allowed Users (Optional)
+                                </label>
+                                <textarea
+                                    value={allowedEmails}
+                                    onChange={(e) => setAllowedEmails(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-lg bg-white/80 shadow-sm border border-[#80deea] text-[#0a4f5c] placeholder-[#26c6da] focus:outline-none focus:ring-2 focus:ring-[#158fa8] text-sm font-mono"
+                                    placeholder="user1@example.com&#10;user2@example.com"
+                                    rows={3}
+                                />
+                                <p className="text-xs text-[#158fa8] mt-1">
+                                    Leave empty for private (only you). Add emails to share.
+                                </p>
+                            </div>
+
                             <button
                                 type="submit"
                                 disabled={eventLoading}
@@ -431,9 +506,29 @@ export default function AdminPage() {
                                     >
                                         <div className="flex justify-between items-center">
                                             <div>
-                                                <h3 className="text-[#0a4f5c] font-semibold">{event.name}</h3>
+                                                <h3 className="text-[#0a4f5c] font-semibold flex items-center gap-2">
+                                                    {event.name}
+                                                    {event.allowed_emails && event.allowed_emails.length > 0 ? (
+                                                        <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full border border-green-200">
+                                                            Shared ({event.allowed_emails.length})
+                                                        </span>
+                                                    ) : (
+                                                        <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full border border-gray-200">
+                                                            Private
+                                                        </span>
+                                                    )}
+                                                </h3>
                                                 <p className="text-[#158fa8] text-sm">Code: {event.code}</p>
                                             </div>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedEventId(event.id)
+                                                    document.getElementById('manage-photos')?.scrollIntoView({ behavior: 'smooth' })
+                                                }}
+                                                className="px-4 py-2 bg-[#158fa8]/10 hover:bg-[#158fa8]/20 text-[#158fa8] text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+                                            >
+                                                <span>+ Photos</span>
+                                            </button>
                                         </div>
                                     </div>
                                 ))
@@ -443,7 +538,7 @@ export default function AdminPage() {
                 </div>
 
                 {/* Photo Management */}
-                <div className="bg-white/80 shadow-sm backdrop-blur-lg rounded-2xl p-8 border border-[#80deea]">
+                <div id="manage-photos" className="bg-white/80 shadow-sm backdrop-blur-lg rounded-2xl p-8 border border-[#80deea]">
                     <h2 className="text-2xl font-semibold text-[#0a4f5c] mb-6">
                         Manage Photos
                     </h2>
@@ -521,6 +616,21 @@ export default function AdminPage() {
                                 >
                                     {photoLoading ? 'Adding...' : 'Add Photos'}
                                 </button>
+
+                                {uploadProgress.total > 0 && (
+                                    <div className="mt-4">
+                                        <div className="flex justify-between text-[#158fa8] text-sm mb-1">
+                                            <span>Uploading...</span>
+                                            <span>{uploadProgress.current} / {uploadProgress.total}</span>
+                                        </div>
+                                        <div className="w-full bg-[#158fa8]/20 rounded-full h-2.5">
+                                            <div
+                                                className="bg-[#158fa8] h-2.5 rounded-full transition-all duration-300"
+                                                style={{ width: `${(uploadProgress.current / uploadProgress.total) * 100}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                )}
                             </form>
 
                             {/* Photos Grid */}

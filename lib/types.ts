@@ -3,6 +3,8 @@ export interface Event {
     name: string
     code: string
     created_at: string
+    allowed_emails?: string[]
+    created_by?: string
 }
 
 export interface Photo {
