@@ -18,7 +18,7 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
           <Link
-            href="/find"
+            href="/login"
             className="group relative px-8 py-4 bg-[#158fa8] text-white rounded-full font-semibold text-lg hover:bg-[#0e6b7d] transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 w-full sm:w-auto"
           >
             <span className="flex items-center justify-center gap-2">

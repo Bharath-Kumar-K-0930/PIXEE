@@ -357,11 +357,14 @@ export default function AdminPage() {
                         <h1 className="text-5xl font-bold text-[#0a4f5c] mb-2">
                             PIXEE <span className="text-[#158fa8]">Admin</span>
                         </h1>
-                        <p className="text-[#158fa8]">Logged in as: {user.email}</p>
+                        <p className="text-[#158fa8] flex items-center gap-2">
+                            <span className="font-semibold">{user.user_metadata?.full_name || 'User'}</span>
+                            <span className="text-sm opacity-75">({user.email})</span>
+                        </p>
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="px-6 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-200 border border-red-500/50 rounded-lg transition-colors"
+                        className="px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-red-500/30 hover:scale-105 hover:from-red-400 hover:to-red-500 transition-all duration-300 transform"
                     >
                         Logout
                     </button>

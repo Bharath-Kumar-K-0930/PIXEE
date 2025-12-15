@@ -11,9 +11,14 @@ import {
     euclideanDistance,
     MatchResult,
 } from '@/lib/faceDetection'
+import Link from 'next/link'
 import MasonryGallery from '@/components/MasonryGallery'
+import { createClient } from '@/utils/supabase/client'
+import { User } from '@supabase/supabase-js'
 
 export default function FindPage() {
+    const [user, setUser] = useState<User | null>(null)
+    const supabase = createClient()
     const [events, setEvents] = useState<Event[]>([])
     const [selectedEventId, setSelectedEventId] = useState('')
     const [selfieFile, setSelfieFile] = useState<File | null>(null)
@@ -27,9 +32,21 @@ export default function FindPage() {
     const MATCH_THRESHOLD = 0.65 // Lower distance = better match (was 0.55, now more lenient)
 
     useEffect(() => {
+        checkUser()
         loadEvents()
         initializeModels()
     }, [])
+
+    async function checkUser() {
+        const { data: { session } } = await supabase.auth.getSession()
+        setUser(session?.user || null)
+    }
+
+    async function handleLogout() {
+        await supabase.auth.signOut()
+        setUser(null)
+        window.location.href = '/'
+    }
 
     async function loadEvents() {
         try {
@@ -170,7 +187,21 @@ export default function FindPage() {
         <div className="min-h-screen bg-gradient-to-br from-white via-[#e0f7fa] to-[#e0f7fa] p-8">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-12 relative">
+                    {user && (
+                        <div className="absolute top-0 right-0 flex flex-col items-end gap-2">
+                            <p className="text-[#158fa8] flex items-center gap-2 text-sm">
+                                <span className="font-semibold">{user.user_metadata?.full_name || 'User'}</span>
+                                <span className="opacity-75 hidden sm:inline">({user.email})</span>
+                            </p>
+                            <button
+                                onClick={handleLogout}
+                                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-red-500/30 hover:scale-105 hover:from-red-400 hover:to-red-500 transition-all duration-300 transform"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    )}
                     <h1 className="text-6xl font-bold text-[#0a4f5c] mb-4">PIXEE</h1>
                     <p className="text-xl text-[#158fa8] mb-2">
                         Upload a selfie → Find your memories instantly
