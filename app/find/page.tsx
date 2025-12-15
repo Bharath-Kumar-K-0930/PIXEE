@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase, Event } from '@/lib/supabase'
+import { Event, Photo } from '@/lib/types'
 import * as faceapi from 'face-api.js'
 import {
     loadModels,
@@ -11,7 +11,7 @@ import {
     euclideanDistance,
     MatchResult,
 } from '@/lib/faceDetection'
-import InfiniteGallery from '@/components/3d-gallery-photography'
+import MasonryGallery from '@/components/MasonryGallery'
 
 export default function FindPage() {
     const [events, setEvents] = useState<Event[]>([])
@@ -32,13 +32,14 @@ export default function FindPage() {
     }, [])
 
     async function loadEvents() {
-        const { data } = await supabase
-            .from('events')
-            .select('*')
-            .order('created_at', { ascending: false })
-
-        if (data) {
-            setEvents(data)
+        try {
+            const res = await fetch('/api/events')
+            const data = await res.json()
+            if (Array.isArray(data)) {
+                setEvents(data)
+            }
+        } catch (err) {
+            console.error('Failed to load events', err)
         }
     }
 
@@ -88,13 +89,10 @@ export default function FindPage() {
 
             // Step 2: Fetch event photos
             setProgress('Loading event photos...')
-            const { data: photos, error: fetchError } = await supabase
-                .from('photos')
-                .select('*')
-                .eq('event_id', selectedEventId)
+            const res = await fetch(`/api/photos?eventId=${selectedEventId}`)
+            const photos: Photo[] = await res.json()
 
             console.log('📷 Fetched photos from database:', photos)
-            console.log('Fetch error (if any):', fetchError)
 
             if (!photos || photos.length === 0) {
                 console.warn('⚠️ No photos found for this event')
@@ -312,38 +310,9 @@ export default function FindPage() {
                     </div>
                 )}
 
-                {/* Results Gallery - 3D View */}
+                {/* Results Gallery - Masonry View */}
                 {matches.length > 0 && (
-                    <div className="relative h-screen bg-black">
-                        <InfiniteGallery
-                            images={matches.map((match, index) => ({
-                                src: match.imageUrl,
-                                alt: `Match ${index + 1} - ${match.confidence.toFixed(0)}% confidence`
-                            }))}
-                            speed={1.2}
-                            zSpacing={3}
-                            visibleCount={12}
-                            falloff={{ near: 0.8, far: 14 }}
-                            className="h-full w-full rounded-lg overflow-hidden"
-                        />
-                        <div className="h-screen inset-0 pointer-events-none fixed flex items-center justify-center text-center px-3 mix-blend-exclusion text-[#0a4f5c] z-10">
-                            <div>
-                                <h1 className="font-serif text-5xl md:text-8xl tracking-tight mb-4">
-                                    <span className="italic">Your Photos</span>
-                                </h1>
-                                <p className="text-2xl md:text-4xl">
-                                    Found {matches.length} {matches.length === 1 ? 'photo' : 'photos'}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="text-center fixed bottom-10 left-0 right-0 font-mono uppercase text-[11px] font-semibold text-[#0a4f5c] z-10">
-                            <p>Use mouse wheel, arrow keys, or touch to navigate</p>
-                            <p className="opacity-60">
-                                Auto-play resumes after 3 seconds of inactivity
-                            </p>
-                        </div>
-                    </div>
+                    <MasonryGallery images={matches} />
                 )}
             </div>
         </div>

@@ -1,0 +1,7 @@
+{
+  "method": "bucket.storage.getBuckets()",
+  "projectId": "pixee-f1f60",
+  "foundBuckets": [],
+  "error": null,
+  "success": true
+}

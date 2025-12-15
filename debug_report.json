@@ -1,0 +1,30 @@
+{
+  "projectId": "pixee-f1f60",
+  "defaultBucket": "pixee-f1f60.firebasestorage.app",
+  "tests": [
+    {
+      "bucketName": "pixee-f1f60.appspot.com",
+      "status": "Failed",
+      "writable": false,
+      "error": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n"
+    },
+    {
+      "bucketName": "pixee-f1f60.firebasestorage.app",
+      "status": "Failed",
+      "writable": false,
+      "error": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n"
+    },
+    {
+      "bucketName": "staging.pixee-f1f60.appspot.com",
+      "status": "Failed",
+      "writable": false,
+      "error": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n"
+    },
+    {
+      "bucketName": "pixee-f1f60.storage.firebase.com",
+      "status": "Failed",
+      "writable": false,
+      "error": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n"
+    }
+  ]
+}
