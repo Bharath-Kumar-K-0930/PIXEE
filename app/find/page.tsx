@@ -15,6 +15,7 @@ import Link from 'next/link'
 import MasonryGallery from '@/components/MasonryGallery'
 import { createClient } from '@/utils/supabase/client'
 import { User } from '@supabase/supabase-js'
+import Alert from '@/components/Alert'
 
 export default function FindPage() {
     const [user, setUser] = useState<User | null>(null)
@@ -330,14 +331,23 @@ export default function FindPage() {
 
                 {/* Progress/Error Messages */}
                 {progress && (
-                    <div className="bg-white/80 shadow-sm border border-[#80deea] rounded-lg p-4 mb-8">
-                        <p className="text-[#158fa8] text-center">{progress}</p>
+                    <div className="mb-8 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <Alert
+                            type={progress.includes('Found') ? 'success' : 'info'}
+                            message={progress}
+                            title={progress.includes('Found') ? 'Success' : 'Status'}
+                        />
                     </div>
                 )}
 
                 {error && (
-                    <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-8">
-                        <p className="text-red-200 text-center">{error}</p>
+                    <div className="mb-8 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <Alert
+                            type="error"
+                            title="Error"
+                            message={error}
+                            onClose={() => setError('')}
+                        />
                     </div>
                 )}
 

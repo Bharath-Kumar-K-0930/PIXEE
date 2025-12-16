@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client'
 import { User } from '@supabase/supabase-js'
 import Toast from '@/components/Toast'
 import ConfirmModal from '@/components/ConfirmModal'
+import Alert from '@/components/Alert'
 
 export default function AdminPage() {
     const supabase = createClient()
@@ -358,8 +359,13 @@ export default function AdminPage() {
                             </div>
 
                             {authError && (
-                                <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-red-200 text-sm">
-                                    {authError}
+                                <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                                    <Alert
+                                        type="error"
+                                        title="Authentication Error"
+                                        message={authError}
+                                        onClose={() => setAuthError('')}
+                                    />
                                 </div>
                             )}
 
